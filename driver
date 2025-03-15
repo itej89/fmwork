@@ -12,8 +12,6 @@ from PIL import Image
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
 
-from rpd_mad_profiler import MADProfiler
-
 class FMworkException(Exception): pass
 
 def banner(*s):
@@ -192,11 +190,10 @@ def run(r):
     )
 
     
-    with MADProfiler(backend="rpd", nvtx_tracing=True):
-        t0 = time_get()
-        outputs = var.engine.generate(setup_input(), sampling_params)
-        t1 = time_get()
-        dt = time_diff(t1, t0)
+    t0 = time_get()
+    outputs = var.engine.generate(setup_input(), sampling_params)
+    t1 = time_get()
+    dt = time_diff(t1, t0)
 
     for output in outputs:
         input_size  = len(output.prompt_token_ids)
